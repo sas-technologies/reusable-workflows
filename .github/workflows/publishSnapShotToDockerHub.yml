@@ -4,6 +4,7 @@ on:
   workflow_call:
     inputs:
       secret-logging:
+        required: true
     secrets:
       SAS_ARTIFACTORY_USER:
         required: true
