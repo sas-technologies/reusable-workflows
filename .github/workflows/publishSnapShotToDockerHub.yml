@@ -8,12 +8,16 @@ on:
     secrets:
       SAS_ARTIFACTORY_USER:
         required: true
+        type: string
       SAS_ARTIFACTORY_PASSWORD:
         required: true
+        type: string
       DOCKERHUB_USERNAME:
         required: true
+        type: string
       DOCKERHUB_TOKEN:
         required: true
+        type: string
 
 jobs:
 
