@@ -1,0 +1,121 @@
+name: SAS Technologies CI CD for Releases
+
+on:
+  workflow_call:
+    inputs:
+      PROJECT_NAME:
+        required: true
+        type: string
+    secrets:
+      SAS_ARTIFACTORY_USER:
+        required: true
+      SAS_ARTIFACTORY_PASSWORD:
+        required: true
+      DOCKERHUB_USERNAME:
+        required: true
+      DOCKERHUB_TOKEN:
+        required: true
+
+jobs:
+
+  Publish_on_DockerHub:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+
+      -
+        name: Setup Private Artifactory Credentials
+        uses: s4u/maven-settings-action@v2.5.0
+        with:
+          servers: |
+            [{
+              "id": "archiva.internal",
+              "username": "${{ secrets.SAS_ARTIFACTORY_USER }}",
+              "password": "${{ secrets.SAS_ARTIFACTORY_PASSWORD }}"},
+            {
+              "id": "archiva.snapshots",
+              "username": "${{ secrets.SAS_ARTIFACTORY_USER }}",
+              "password": "${{ secrets.SAS_ARTIFACTORY_PASSWORD }}"
+            }]
+      -
+        name: Test Project
+        run: mvn test
+
+      -
+        name: Fetch Merged Branch Info
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+        run: |
+          echo "MERGED_BRANCH_TYPE=$(echo $BRANCH_NAME | awk -F / '{ print tolower($1)}')" >> $GITHUB_ENV
+      -
+        name: Print Merged Branch Info
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+          BRANCH_TYPE: ${{ env.MERGED_BRANCH_TYPE }}
+        run: |
+          echo "Merged branch type: $BRANCH_TYPE"
+          echo "Merged branch name: $BRANCH_NAME"
+      -
+        name: Pump Version if Patch
+        if: ${{ env.MERGED_BRANCH_TYPE == 'hotfix' }}
+        run: mvn validate -DbumpPatch
+
+      -
+        name: Pump Version if Minor
+        if: ${{ env.MERGED_BRANCH_TYPE == 'minor-release' }}
+        run: mvn validate -DbumpMinor
+
+      -
+        name: Pump Version if Major
+        if: ${{ env.MERGED_BRANCH_TYPE == 'major-release' }}
+        run: mvn validate -DbumpMajor
+
+      -
+        name: Set git configuration
+        run: |
+          git config --global user.name 'Sebastia Rapa'
+          git config --global user.email 'sebastian.rapa@sas-technologies.ro'
+      -
+        name: Commit & Push Version Pump
+        run: |
+          git commit -am "Automated Version Pump"
+          git push
+      -
+        name: Delete Merged Branch
+        run: git push origin :${{ github.head_ref }}
+
+      -
+        name: Build jar File
+        run: mvn -B package --file pom.xml -DskipTests
+
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      -
+        name: Fetch Project Name & Version
+        run: |
+          echo "PROJECT_NAME=$(git rev-parse --show-toplevel | awk -F / '{print $NF}')" >> $GITHUB_ENV
+          echo "PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+      -
+        name: Build and Push Version
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: sastechnologies/${{ env.PROJECT_NAME }}:${{ env.PROJECT_VERSION }}
+
+      -
+        name: Build and Push latest
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: sastechnologies/${{ env.PROJECT_NAME }}:latest
