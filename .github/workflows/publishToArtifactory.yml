@@ -10,7 +10,7 @@ on:
 
 jobs:
 
-  Publish_to_Artifactory:
+  publish-to-artifactory:
 
     runs-on: ubuntu-latest
 
