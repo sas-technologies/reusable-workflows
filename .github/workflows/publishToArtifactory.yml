@@ -2,11 +2,6 @@ name: CI-CD Platform Parent
 
 on:
   workflow_call:
-    secrets:
-      SAS_ARTIFACTORY_USER:
-        required: true
-      SAS_ARTIFACTORY_PASSWORD:
-        required: true
 
 jobs:
 
