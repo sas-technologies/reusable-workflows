@@ -1,0 +1,85 @@
+name: CI-CD Platform Parent
+
+on:
+  workflow_call:
+    secrets:
+      SAS_ARTIFACTORY_USER:
+        required: true
+      SAS_ARTIFACTORY_PASSWORD:
+        required: true
+
+jobs:
+
+  Publish_to_Artifactory:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+
+      -
+        name: Setup Private Artifactory Credentials
+        uses: s4u/maven-settings-action@v2.5.0
+        with:
+          servers: |
+            [{
+              "id": "archiva.internal",
+              "username": "${{ secrets.SAS_ARTIFACTORY_USER }}",
+              "password": "${{ secrets.SAS_ARTIFACTORY_PASSWORD }}"},
+            {
+              "id": "archiva.snapshots",
+              "username": "${{ secrets.SAS_ARTIFACTORY_USER }}",
+              "password": "${{ secrets.SAS_ARTIFACTORY_PASSWORD }}"
+            }]
+
+      -
+        name: Fetch Merged Branch Info
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+        run: |
+          echo "MERGED_BRANCH_TYPE=$(echo $BRANCH_NAME | awk -F / 'END{ print tolower($1)}')" >> $GITHUB_ENV
+
+      -
+        name: Print Merged Branch Info
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+        run: |
+          echo "Merged branch type: ${{ env.MERGED_BRANCH_TYPE }}"
+          echo "Merged branch name: $BRANCH_NAME"
+
+      -
+        name: Pump Version if Patch
+        if: ${{ env.MERGED_BRANCH_TYPE == 'hotfix' }}
+        run: mvn validate -DbumpPatch
+
+      -
+        name: Pump Version if Minor
+        if: ${{ env.MERGED_BRANCH_TYPE == 'minor-release' }}
+        run: mvn validate -DbumpMinor
+
+      -
+        name: Pump Version if Major
+        if: ${{ env.MERGED_BRANCH_TYPE == 'major-release' }}
+        run: mvn validate -DbumpMajor
+
+      -
+        name: Set git configuration
+        run: |
+          git config --global user.name 'Sebastia Rapa'
+          git config --global user.email 'sebastian.rapa@sas-technologies.ro'
+
+      -
+        name: Commit & Push Version Pump
+        run: |
+          git commit -am "Automated Version Pump"
+          git push
+
+      -
+        name: Delete Merged Branch
+        run: git push origin :${{ github.head_ref }}
+
+      -
+        name: Deploy to Artifactory
+        run: mvn deploy
