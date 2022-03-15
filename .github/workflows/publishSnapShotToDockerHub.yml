@@ -5,6 +5,7 @@ on:
     inputs:
       secret-logging:
         required: true
+        type: string
     secrets:
       SAS_ARTIFACTORY_USER:
         required: true
