@@ -2,10 +2,6 @@ name: SAS Technologies CI CD for Releases
 
 on:
   workflow_call:
-    inputs:
-      secret-logging:
-        required: true
-        type: string
     secrets:
       SAS_ARTIFACTORY_USER:
         required: true
@@ -41,15 +37,6 @@ jobs:
               "username": "${{ secrets.SAS_ARTIFACTORY_USER }}",
               "password": "${{ secrets.SAS_ARTIFACTORY_PASSWORD }}"
             }]
-
-      -
-        name: Print Credentials if debug
-        if: ${{ inputs.secret-logging == 'debug' }}
-        run: |
-          echo ${{ secrets.SAS_ARTIFACTORY_USER }}
-          echo ${{ secrets.SAS_ARTIFACTORY_PASSWORD }}
-          echo ${{ secrets.DOCKERHUB_USERNAME }}
-          echo ${{ secrets.DOCKERHUB_TOKEN }}
 
       -
         name: Build jar File
