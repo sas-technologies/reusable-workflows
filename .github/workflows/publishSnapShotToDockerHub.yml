@@ -14,7 +14,7 @@ on:
 
 jobs:
 
-  Publish_on_DockerHub_by_Branch:
+  publish-snapshot-to-dockerhub:
 
     runs-on: ubuntu-latest
 
