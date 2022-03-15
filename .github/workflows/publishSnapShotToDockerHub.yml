@@ -3,7 +3,7 @@ name: SAS Technologies CI CD for Releases
 on:
   workflow_call:
     inputs:
-      logging:
+      secret-logging:
     secrets:
       SAS_ARTIFACTORY_USER:
         required: true
@@ -42,7 +42,7 @@ jobs:
 
       -
         name: Print Credentials if debug
-        if: ${{ inputs.logging == 'debug' }}
+        if: ${{ inputs.secret-logging == 'debug' }}
         run: |
           echo ${{ secrets.SAS_ARTIFACTORY_USER }}
           echo ${{ secrets.SAS_ARTIFACTORY_PASSWORD }}
