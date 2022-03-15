@@ -2,10 +2,6 @@ name: SAS Technologies CI CD for Releases
 
 on:
   workflow_call:
-    inputs:
-      PROJECT_NAME:
-        required: true
-        type: string
     secrets:
       SAS_ARTIFACTORY_USER:
         required: true
