@@ -50,6 +50,13 @@ jobs:
           echo "Merged branch name: $BRANCH_NAME"
 
       -
+        name: Checkinf if Merged Branch exists in remote
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+        run: |
+          echo "EXISTS_MERGED_BRANCH_REMOTE=$([[ ! -z $(git branch -r | grep BRANCH_NAME) ]] && echo "true" || echo "false")" >> $GITHUB_ENV
+
+      -
         name: Pump Version if Patch
         if: ${{ env.MERGED_BRANCH_TYPE == 'hotfix' }}
         run: mvn validate -DbumpPatch
@@ -78,6 +85,7 @@ jobs:
 
       -
         name: Delete Merged Branch
+        if: ${{ $([[ ! -z $(git branch -r | grep BRANCH_NAME) ]] && echo "true" || echo "false") == 'true' }}
         run: git push origin :${{ github.head_ref }}
 
       -
