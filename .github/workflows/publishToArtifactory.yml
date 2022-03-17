@@ -85,7 +85,7 @@ jobs:
 
       -
         name: Delete Merged Branch
-        if: ${{ $([[ ! -z $(git branch -r | grep BRANCH_NAME) ]] && echo "true" || echo "false") == 'true' }}
+        if: ${{ env.EXISTS_MERGED_BRANCH_REMOTE == 'true' }}
         run: git push origin :${{ github.head_ref }}
 
       -
