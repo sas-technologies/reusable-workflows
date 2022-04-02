@@ -47,6 +47,7 @@ jobs:
           BRANCH_NAME: ${{ github.head_ref }}
         run: |
           echo "MERGED_BRANCH_TYPE=$(echo $BRANCH_NAME | awk -F / '{ print tolower($1)}')" >> $GITHUB_ENV
+          echo "REMOTE_BRANCHES=$(echo $(git branch -r)" >> $GITHUB_ENV
       -
         name: Print Merged Branch Info
         env:
@@ -82,7 +83,7 @@ jobs:
           git push
       -
         name: Delete Merged Branch
-        if: ${{ contains($(git branch -r), github.head_ref) }}
+        if: ${{ contains(env.REMOTE_BRANCHES, github.head_ref) }}
         run: git push origin :${{ github.head_ref }}
 
       -
