@@ -82,7 +82,7 @@ jobs:
           git push
       -
         name: Delete Merged Branch
-        if: ${{contains($(git branch -r), github.head_ref)}}
+        if: ${{ contains($(git branch -r), github.head_ref) }}
         run: git push origin :${{ github.head_ref }}
 
       -
