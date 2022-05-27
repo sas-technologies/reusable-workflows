@@ -80,9 +80,6 @@ jobs:
         run: |
           git commit -am "Automated Version Pump"
           git push
-      -
-        name: Delete Merged Branch
-        run: git push origin :${{ github.head_ref }}
 
       -
         name: Build jar File
