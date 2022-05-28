@@ -21,7 +21,7 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       -
         name: Setup Private Artifactory Credentials
@@ -37,9 +37,10 @@ jobs:
               "username": "${{ secrets.SAS_ARTIFACTORY_USER }}",
               "password": "${{ secrets.SAS_ARTIFACTORY_PASSWORD }}"
             }]
+
       -
         name: Test Project
-        run: mvn test
+        run: ./gradlew test
 
       -
         name: Fetch Merged Branch Info
@@ -59,22 +60,22 @@ jobs:
       -
         name: Pump Version if Patch
         if: ${{ env.MERGED_BRANCH_TYPE == 'hotfix' }}
-        run: mvn validate -DbumpPatch
+        run: ./gradlew :bumpPatch
 
       -
         name: Pump Version if Minor
         if: ${{ env.MERGED_BRANCH_TYPE == 'minor-release' }}
-        run: mvn validate -DbumpMinor
+        run: ./gradlew :bumpMinor
 
       -
         name: Pump Version if Major
         if: ${{ env.MERGED_BRANCH_TYPE == 'major-release' }}
-        run: mvn validate -DbumpMajor
+        run: ./gradlew :bumpMajor
 
       -
         name: Set git configuration
         run: |
-          git config --global user.name 'Sebastia Rapa'
+          git config --global user.name 'Sebastian Rapa'
           git config --global user.email 'sebastian.rapa@sas-technologies.ro'
       -
         name: Commit & Push Version Pump
@@ -84,7 +85,7 @@ jobs:
 
       -
         name: Build jar File
-        run: mvn -B package --file pom.xml -DskipTests
+        run: ./gradlew build -x test
 
       -
         name: Login to DockerHub
@@ -92,12 +93,12 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
       -
-        name: Fetch Project Name & Version
+        name: Fetch Project and Branch Names
         run: |
           echo "PROJECT_NAME=$(git rev-parse --show-toplevel | awk -F / '{print $NF}')" >> $GITHUB_ENV
-          echo "PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+          echo "PROJECT_VERSION=$(./gradlew properties --no-daemon --console=plain -q | grep "^version:" | awk '{printf $2}')" >> $GITHUB_ENV
+
       -
         name: Build and Push Version
         uses: docker/build-push-action@v2

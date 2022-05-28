@@ -1,0 +1,31 @@
+name: CI-CD Platform Parent
+
+on:
+  workflow_call:
+    secrets:
+      SAS_ARTIFACTORY_USER:
+        required: true
+      SAS_ARTIFACTORY_PASSWORD:
+        required: true
+
+jobs:
+
+  publish-to-artifactory:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+      -
+        name: Publish package
+        uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
+        with:
+          arguments: publish
+        env:
+          SAS_ARTIFACTORY_USER: ${{ secrets.SAS_ARTIFACTORY_USER }}
+          SAS_ARTIFACTORY_PASSWORD: ${{ secrets.SAS_ARTIFACTORY_PASSWORD }}
