@@ -1,0 +1,31 @@
+name: Deploy DERS API to Dev Server
+
+on:
+  workflow_call:
+    secrets:
+      AZURE_STORAGE_CONNECTION_STRING_DEV:
+        required: true
+      DERS_SECURITY_FIREBASE_SERVICE_KEY:
+        required: true
+      DEV_SERVER_PASSWORD:
+        required: true
+
+jobs:
+  deploy-latest-release-on-dev:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute docker-compose remotely via ssh
+        uses: appleboy/ssh-action@master
+        env:
+          AZURE_STORAGE_CONNECTION_STRING_DEV: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_DEV }}
+          DERS_SECURITY_FIREBASE_SERVICE_KEY: ${{ secrets.DERS_SECURITY_FIREBASE_SERVICE_KEY }}
+        with:
+          host: github-actions.sas-technologies.ro
+          username: github-actions
+          password: ${{ secrets.DEV_SERVER_PASSWORD }}
+          envs: AZURE_STORAGE_CONNECTION_STRING_DEV,DERS_SECURITY_FIREBASE_SERVICE_KEY
+          script: |
+            export AZURE_STORAGE_CONNECTION_STRING_DEV=$AZURE_STORAGE_CONNECTION_STRING_DEV
+            export DERS_SECURITY_FIREBASE_SERVICE_KEY=$DERS_SECURITY_FIREBASE_SERVICE_KEY
+            cd /opt/ders
+            docker-compose up -d --no-deps
