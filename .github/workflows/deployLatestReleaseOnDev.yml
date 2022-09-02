@@ -20,7 +20,7 @@ jobs:
           AZURE_STORAGE_CONNECTION_STRING_DEV: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_DEV }}
           DERS_SECURITY_FIREBASE_SERVICE_KEY: ${{ secrets.DERS_SECURITY_FIREBASE_SERVICE_KEY }}
         with:
-          host: github-actions.sas-technologies.ro
+          host: 86.120.169.27
           username: github-actions
           password: ${{ secrets.DEV_SERVER_PASSWORD }}
           envs: AZURE_STORAGE_CONNECTION_STRING_DEV,DERS_SECURITY_FIREBASE_SERVICE_KEY
