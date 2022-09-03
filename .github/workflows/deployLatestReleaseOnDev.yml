@@ -33,5 +33,6 @@ jobs:
             export DERS_SECURITY_FIREBASE_SERVICE_KEY=$DERS_SECURITY_FIREBASE_SERVICE_KEY
             export AZURE_STORAGE_CONNECTION_STRING_DEV=$AZURE_STORAGE_CONNECTION_STRING_DEV
             cd /opt/ders
+            docker-compose down
             docker image rm $IMAGE_NAME 
             docker-compose up -d --no-deps
