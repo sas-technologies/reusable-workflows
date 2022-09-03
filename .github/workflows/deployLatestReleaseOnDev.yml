@@ -21,7 +21,7 @@ jobs:
       - name: Execute docker-compose remotely via ssh
         uses: appleboy/ssh-action@master
         env:
-          IMAGE_NAME: sastechnologeis/${{ inputs.PROJECT_NAME }}:latest
+          IMAGE_NAME: sastechnologies/${{ inputs.PROJECT_NAME }}:latest
           DERS_SECURITY_FIREBASE_SERVICE_KEY: ${{ secrets.DERS_SECURITY_FIREBASE_SERVICE_KEY }}
           AZURE_STORAGE_CONNECTION_STRING_DEV: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_DEV }}
         with:
