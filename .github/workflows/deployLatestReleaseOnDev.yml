@@ -11,6 +11,7 @@ on:
         required: true
     inputs:
       PROJECT_NAME:
+        type: string
         required: true
 
 jobs:
