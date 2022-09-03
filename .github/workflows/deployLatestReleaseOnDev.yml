@@ -9,6 +9,9 @@ on:
         required: true
       DEV_SERVER_PASSWORD:
         required: true
+    inputs:
+      PROJECT_NAME:
+        required: true
 
 jobs:
   deploy-latest-release-on-dev:
@@ -17,15 +20,18 @@ jobs:
       - name: Execute docker-compose remotely via ssh
         uses: appleboy/ssh-action@master
         env:
-          AZURE_STORAGE_CONNECTION_STRING_DEV: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_DEV }}
+          IMAGE_NAME: sastechnologeis/${{ inputs.PROJECT_NAME }}:latest
           DERS_SECURITY_FIREBASE_SERVICE_KEY: ${{ secrets.DERS_SECURITY_FIREBASE_SERVICE_KEY }}
+          AZURE_STORAGE_CONNECTION_STRING_DEV: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_DEV }}
         with:
           host: 86.120.169.27
           username: github-actions
           password: ${{ secrets.DEV_SERVER_PASSWORD }}
-          envs: AZURE_STORAGE_CONNECTION_STRING_DEV,DERS_SECURITY_FIREBASE_SERVICE_KEY
+          envs: IMAGE_NAME,DERS_SECURITY_FIREBASE_SERVICE_KEY,AZURE_STORAGE_CONNECTION_STRING_DEV
           script: |
-            export AZURE_STORAGE_CONNECTION_STRING_DEV=$AZURE_STORAGE_CONNECTION_STRING_DEV
+            export IMAGE_NAME=$IMAGE_NAME
             export DERS_SECURITY_FIREBASE_SERVICE_KEY=$DERS_SECURITY_FIREBASE_SERVICE_KEY
+            export AZURE_STORAGE_CONNECTION_STRING_DEV=$AZURE_STORAGE_CONNECTION_STRING_DEV
             cd /opt/ders
+            docker image rm $IMAGE_NAME 
             docker-compose up -d --no-deps
