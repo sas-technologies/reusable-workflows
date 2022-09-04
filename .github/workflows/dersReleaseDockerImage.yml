@@ -50,10 +50,6 @@ jobs:
           java-version: '17'
 
       -
-        name: Run Unit & Integration Tests
-        run: ./gradlew test --info
-
-      -
         name: Pump Patch Version
         run: ./gradlew :bumpPatch --scan
 
