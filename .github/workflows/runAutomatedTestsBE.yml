@@ -1,0 +1,42 @@
+name: Test DERS Back-End API
+
+on:
+  workflow_call:
+    secrets:
+      # Secrets required by all APIs to pull dependencies from artifactory.sas-technologies.ro
+      SAS_ARTIFACTORY_USER:
+        required: true
+      SAS_ARTIFACTORY_PASSWORD:
+        required: true
+      # Secrets required by Documents Uploader API during tests
+      AZURE_STORAGE_CONNECTION_STRING_TEST:
+        required: false
+      # Secrets required by API Identities during tests
+      DERS_SECURITY_FIREBASE_SERVICE_KEY:
+        required: false
+      DERS_FIREBASE_API_KEY:
+        required: false
+      DERS_TEST_SECURITY_FIREBASE_SERVICE_KEY:
+        required: false
+
+jobs:
+  run-automated-tests:
+    runs-on: ubuntu-latest
+    env:
+      SAS_ARTIFACTORY_USER: ${{ secrets.SAS_ARTIFACTORY_USER }}
+      SAS_ARTIFACTORY_PASSWORD: ${{ secrets.SAS_ARTIFACTORY_PASSWORD }}
+      AZURE_STORAGE_CONNECTION_STRING_TEST: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_TEST }}
+      DERS_FIREBASE_API_KEY: ${{ secrets.DERS_FIREBASE_API_KEY }}
+      DERS_SECURITY_FIREBASE_SERVICE_KEY: ${{ secrets.DERS_SECURITY_FIREBASE_SERVICE_KEY }}
+      DERS_TEST_SECURITY_FIREBASE_SERVICE_KEY: ${{ secrets.DERS_TEST_SECURITY_FIREBASE_SERVICE_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Run Unit & Integration Tests
+        run: ./gradlew test --info
