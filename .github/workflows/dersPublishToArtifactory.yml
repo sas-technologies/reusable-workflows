@@ -1,0 +1,41 @@
+name: Publish Library to Artifact
+on:
+  workflow_call:
+    secrets:
+      SAS_ARTIFACTORY_USER:
+        required: true
+      SAS_ARTIFACTORY_PASSWORD:
+        required: true
+    inputs:
+      PUBLISH_TASK:
+        type: string
+        required: true
+
+env:
+  SAS_ARTIFACTORY_USER: ${{ secrets.SAS_ARTIFACTORY_USER }}
+  SAS_ARTIFACTORY_PASSWORD: ${{ secrets.SAS_ARTIFACTORY_PASSWORD }}
+  PUBLISH_TASK: ${{ inputs.PUBLISH_TASK }}
+
+jobs:
+  sonar-scanner:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Pump Patch Version
+        run: ./gradlew :bumpPatch --scan
+
+      - name: Set git configuration
+        run: |
+          git config --global user.name 'Sebastian Rapa'
+          git config --global user.email 'sebastian.rapa@sas-technologies.ro'
+      - name: Commit & Push Version Pump
+        run: |
+          git commit -am "Automated Version Pump"
+          git push
+
+      - name: Publish Release to Artifactory
+        run: |
+          ./gradlew ${PUBLISH_TASK} --info
