@@ -50,6 +50,22 @@ jobs:
           java-version: '17'
 
       -
+        name: Fetch Merged Branch Info
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+        run: |
+          echo "MERGED_BRANCH_TYPE=$(echo $BRANCH_NAME | awk -F / '{ print tolower($1)}')" >> $GITHUB_ENV
+      -
+        name: Pump Version if Patch or Bugfix
+        if: ${{ env.MERGED_BRANCH_TYPE == 'patch' ||  env.MERGED_BRANCH_TYPE == 'bugfix'}}
+        run: ./gradlew :bumpPatch
+
+      -
+        name: Pump Version if Minor
+        if: ${{ env.MERGED_BRANCH_TYPE == 'feature' }}
+        run: ./gradlew :bumpMinor
+
+      -
         name: Pump Patch Version
         run: ./gradlew :bumpPatch --scan
 
