@@ -65,9 +65,6 @@ jobs:
         if: ${{ env.MERGED_BRANCH_TYPE == 'feature' }}
         run: ./gradlew :bumpMinor
 
-      -
-        name: Pump Patch Version
-        run: ./gradlew :bumpPatch --scan
 
       -
         name: Set git configuration
