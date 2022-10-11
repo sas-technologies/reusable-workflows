@@ -12,11 +12,27 @@ on:
       LIBRARY_VERSION:
         type: string
         required: true
+      SAS_ARTIFACTORY_USER:
+        type: string
+        required: true
+      SAS_ARTIFACTORY_PASSWORD:
+        type: string
+        required: true
 
 jobs:
   dispatch-update-event:
     runs-on: ubuntu-latest
+    env:
+      SAS_ARTIFACTORY_USER: ${{ inputs.SAS_ARTIFACTORY_USER }}
+      SAS_ARTIFACTORY_PASSWORD: ${{ inputs.SAS_ARTIFACTORY_PASSWORD }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Fetch Library version
+        run: |
+          ./gradlew properties | grep "^version:" | cut -d ' ' -f2
+          echo "LIBRARY_VERSION=$(./gradlew properties | grep "^version:" | cut -d ' ' -f2)" >> $GITHUB_ENV
       - name: Dispatch Update of Library
         run: |
           curl \
@@ -24,4 +40,4 @@ jobs:
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.BEARER_TOKEN }}" \
           https://api.github.com/repos/sas-technologies/ders-kotlin-spring-version-catalog/actions/workflows/updateLibVersion.yml/dispatches \
-          -d '{"ref":"master","inputs":{"libName":"${{ inputs.LIBRARY_NAME }}", "libVersion":"${{ inputs.LIBRARY_VERSION }}"}'
+          -d '{"ref":"master","inputs":{"libName":"${{ inputs.LIBRARY_NAME }}", "libVersion":"${{ env.LIBRARY_VERSION }}"}'
