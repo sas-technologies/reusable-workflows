@@ -6,9 +6,6 @@ on:
       LIBRARY_NAME:
         type: string
         required: true
-      LIBRARY_VERSION:
-        type: string
-        required: true
     secrets:
       BEARER_TOKEN:
         type: string
