@@ -2,10 +2,10 @@ name: Dispatch Update Event to Version Catalog
 
 on:
   workflow_call:
-    secrets:
-      BEARER_TOKEN:
-        required: true
     inputs:
+      BEARER_TOKEN:
+        type: string
+        required: true
       LIBRARY_NAME:
         type: string
         required: true
