@@ -8,13 +8,10 @@ on:
         required: true
     secrets:
       BEARER_TOKEN:
-        type: string
         required: true
       SAS_ARTIFACTORY_USER:
-        type: string
         required: true
       SAS_ARTIFACTORY_PASSWORD:
-        type: string
         required: true
 
 jobs:
