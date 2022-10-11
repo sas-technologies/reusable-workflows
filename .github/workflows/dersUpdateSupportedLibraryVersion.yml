@@ -25,4 +25,4 @@ jobs:
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.BEARER_TOKEN }}" \
           https://api.github.com/repos/sas-technologies/ders-kotlin-spring-version-catalog/actions/workflows/updateLibVersion.yml/dispatches \
-          -d '{"ref":"master","inputs":{"libName":"${{ inputs.LIBRARY_NAME }}", "libVersion":"${{ inputs.LIBRARY_VERSION }}"}'
+          -d '{"ref":"master","inputs":{"libName":"${{ inputs.LIBRARY_NAME }}", "libVersion":"${{ env.LIBRARY_VERSION }}"}'
