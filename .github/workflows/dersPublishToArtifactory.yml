@@ -17,7 +17,7 @@ env:
   PUBLISH_TASK: ${{ inputs.PUBLISH_TASK }}
 
 jobs:
-  sonar-scanner:
+  publish-artifact:
     runs-on: ubuntu-latest
     steps:
 
