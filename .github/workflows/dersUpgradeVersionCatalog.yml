@@ -5,24 +5,17 @@ on:
     secrets:
       BEARER_TOKEN:
         required: true
-      SAS_ARTIFACTORY_USER:
-        required: true
-      SAS_ARTIFACTORY_PASSWORD:
-        required: true
 
 jobs:
   dispatch-update-event:
     runs-on: ubuntu-latest
-    env:
-      SAS_ARTIFACTORY_USER: ${{ secrets.SAS_ARTIFACTORY_USER }}
-      SAS_ARTIFACTORY_PASSWORD: ${{ secrets.SAS_ARTIFACTORY_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Fetch version of catalog
         run: |
-          echo "CATALOG_VERSION=$(./gradlew properties | grep "^version:" | cut -d ' ' -f2)" >> $GITHUB_ENV
+          echo "CATALOG_VERSION=$(grep "^version =" build.gradle.kts| cut -d ' ' -f3 | sed 's/\"//' | sed 's/\"//')" >> $GITHUB_ENV
       - name: Dispatch Update of Library
         run: |
           curl \
