@@ -1,0 +1,33 @@
+name: Upgrade Version Catalog
+
+on:
+  workflow_call:
+    inputs:
+      catalogVersion:
+        description: 'The version of the catalog to upgrade to'
+        required: true
+
+jobs:
+  upgrade-version-catalog:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Logging inputs
+        run: |
+          echo "New version of catalog that is upgrading to: ${{ inputs.catalogVersion }}"
+
+      - name: Run upgrade script
+        run: bash scripts/upgradeVersionCatalog.sh ${{ inputs.catalogVersion }}
+
+      - name: Set git configuration
+        run: |
+          git config --global user.name 'Sebastian Rapa'
+          git config --global user.email 'sebastian.rapa@sas-technologies.ro'
+
+      - name: Commit & Push Version Pump
+        run: |
+          git commit -am "Automated Version Catalog Upgrade"
+          git push
