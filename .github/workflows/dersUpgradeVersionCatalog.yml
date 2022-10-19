@@ -3,7 +3,7 @@ name: Upgrade Version Catalog
 on:
   workflow_call:
     inputs:
-      catalogVersion:
+      CATALOG_VERSION:
         description: 'The version of the catalog to upgrade to'
         required: true
 
@@ -17,10 +17,10 @@ jobs:
 
       - name: Logging inputs
         run: |
-          echo "New version of catalog that is upgrading to: ${{ inputs.catalogVersion }}"
+          echo "New version of catalog that is upgrading to: ${{ inputs.CATALOG_VERSION }}"
 
       - name: Run upgrade script
-        run: bash scripts/upgradeVersionCatalog.sh ${{ inputs.catalogVersion }}
+        run: bash scripts/upgradeVersionCatalog.sh ${{ inputs.CATALOG_VERSION }}
 
       - name: Set git configuration
         run: |
