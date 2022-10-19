@@ -26,7 +26,6 @@ jobs:
 
       - name: Fetch Library version
         run: |
-          ./gradlew properties | grep "^version:" | cut -d ' ' -f2
           echo "LIBRARY_VERSION=$(./gradlew properties | grep "^version:" | cut -d ' ' -f2)" >> $GITHUB_ENV
       - name: Dispatch Update of Library
         run: |
