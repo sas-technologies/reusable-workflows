@@ -1,0 +1,33 @@
+name: Dispatch Update Event to Version Catalog
+
+on:
+  workflow_call:
+    secrets:
+      BEARER_TOKEN:
+        required: true
+      SAS_ARTIFACTORY_USER:
+        required: true
+      SAS_ARTIFACTORY_PASSWORD:
+        required: true
+
+jobs:
+  dispatch-update-event:
+    runs-on: ubuntu-latest
+    env:
+      SAS_ARTIFACTORY_USER: ${{ secrets.SAS_ARTIFACTORY_USER }}
+      SAS_ARTIFACTORY_PASSWORD: ${{ secrets.SAS_ARTIFACTORY_PASSWORD }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Fetch version of catalog
+        run: |
+          echo "CATALOG_VERSION=$(./gradlew properties | grep "^version:" | cut -d ' ' -f2)" >> $GITHUB_ENV
+      - name: Dispatch Update of Library
+        run: |
+          curl \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.BEARER_TOKEN }}" \
+          https://api.github.com/repos/sas-technologies/ders-api-authorities/actions/workflows/upgradeVersionCatalog.yml/dispatches \
+          -d '{"ref":"master","inputs":{"catalogVersion":"${{ env.CATALOG_VERSION }}"}'
