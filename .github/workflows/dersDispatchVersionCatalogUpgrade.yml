@@ -1,0 +1,94 @@
+name: Dispatch Update Event to Version Catalog
+
+on:
+  workflow_call:
+    secrets:
+      BEARER_TOKEN:
+        required: true
+
+jobs:
+  dispatch-upgrade-to-api-authorities:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Fetch version of catalog
+        run: |
+          echo "CATALOG_VERSION=$(grep "^version =" build.gradle.kts| cut -d ' ' -f3 | sed 's/\"//' | sed 's/\"//')" >> $GITHUB_ENV
+      - name: Dispatch Update of Library
+        run: |
+          curl \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.BEARER_TOKEN }}" \
+          https://api.github.com/repos/sas-technologies/ders-api-authorities/actions/workflows/upgradeVersionCatalog.yml/dispatches \
+          -d '{"ref":"master","inputs":{"catalogVersion":"${{ env.CATALOG_VERSION }}"}'
+  dispatch-upgrade-to-api-events:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Fetch version of catalog
+        run: |
+          echo "CATALOG_VERSION=$(grep "^version =" build.gradle.kts| cut -d ' ' -f3 | sed 's/\"//' | sed 's/\"//')" >> $GITHUB_ENV
+      - name: Dispatch Update of Library
+        run: |
+          curl \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.BEARER_TOKEN }}" \
+          https://api.github.com/repos/sas-technologies/ders-api-events/actions/workflows/upgradeVersionCatalog.yml/dispatches \
+          -d '{"ref":"master","inputs":{"catalogVersion":"${{ env.CATALOG_VERSION }}"}'
+  dispatch-upgrade-to-api-identities:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Fetch version of catalog
+        run: |
+          echo "CATALOG_VERSION=$(grep "^version =" build.gradle.kts| cut -d ' ' -f3 | sed 's/\"//' | sed 's/\"//')" >> $GITHUB_ENV
+      - name: Dispatch Update of Library
+        run: |
+          curl \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.BEARER_TOKEN }}" \
+          https://api.github.com/repos/sas-technologies/ders-api-identities/actions/workflows/upgradeVersionCatalog.yml/dispatches \
+          -d '{"ref":"master","inputs":{"catalogVersion":"${{ env.CATALOG_VERSION }}"}'
+  dispatch-upgrade-to-api-sai:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Fetch version of catalog
+        run: |
+          echo "CATALOG_VERSION=$(grep "^version =" build.gradle.kts| cut -d ' ' -f3 | sed 's/\"//' | sed 's/\"//')" >> $GITHUB_ENV
+      - name: Dispatch Update of Library
+        run: |
+          curl \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.BEARER_TOKEN }}" \
+          https://api.github.com/repos/sas-technologies/ders-api-sai/actions/workflows/upgradeVersionCatalog.yml/dispatches \
+          -d '{"ref":"master","inputs":{"catalogVersion":"${{ env.CATALOG_VERSION }}"}'
+  dispatch-upgrade-to-documents-uploader:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Fetch version of catalog
+        run: |
+          echo "CATALOG_VERSION=$(grep "^version =" build.gradle.kts| cut -d ' ' -f3 | sed 's/\"//' | sed 's/\"//')" >> $GITHUB_ENV
+      - name: Dispatch Update of Library
+        run: |
+          curl \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.BEARER_TOKEN }}" \
+          https://api.github.com/repos/sas-technologies/ders-documents-uploader/actions/workflows/upgradeVersionCatalog.yml/dispatches \
+          -d '{"ref":"master","inputs":{"catalogVersion":"${{ env.CATALOG_VERSION }}"}'
