@@ -11,6 +11,8 @@ on:
 jobs:
   upgrade-version-catalog:
     runs-on: ubuntu-latest
+    env:
+      NEW_CATALOG_VERSION: ${{ inputs.CATALOG_VERSION }}"
     steps:
 
       - name: Checkout
@@ -18,10 +20,10 @@ jobs:
 
       - name: Logging inputs
         run: |
-          echo "New version of catalog that is upgrading to: ${{ inputs.CATALOG_VERSION }}"
+          echo "New version of catalog that is upgrading to: $NEW_CATALOG_VERSION"
 
       - name: Run upgrade script
-        run: bash scripts/upgradeVersionCatalog.sh ${{ inputs.CATALOG_VERSION }}
+        run: bash scripts/upgradeVersionCatalog.sh $NEW_CATALOG_VERSION
 
       - name: Set git configuration
         run: |
@@ -30,5 +32,5 @@ jobs:
 
       - name: Commit & Push Version Pump
         run: |
-          git commit -am "Automated Version Catalog Upgrade"
+          git commit -am "Automated upgrade of Version Catalog to version $NEW_CATALOG_VERSION"
           git push
