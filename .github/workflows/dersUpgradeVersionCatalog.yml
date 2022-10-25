@@ -12,7 +12,7 @@ jobs:
   upgrade-version-catalog:
     runs-on: ubuntu-latest
     env:
-      NEW_CATALOG_VERSION: ${{ inputs.CATALOG_VERSION }}"
+      NEW_CATALOG_VERSION: ${{ inputs.CATALOG_VERSION }}
     steps:
 
       - name: Checkout
