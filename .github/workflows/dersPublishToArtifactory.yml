@@ -24,6 +24,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      -
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Pump Patch Version
         run: ./gradlew :bumpPatch --scan
 
@@ -31,6 +37,7 @@ jobs:
         run: |
           git config --global user.name 'Sebastian Rapa'
           git config --global user.email 'sebastian.rapa@sas-technologies.ro'
+
       - name: Commit & Push Version Pump
         run: |
           git commit -am "Automated Version Pump"
