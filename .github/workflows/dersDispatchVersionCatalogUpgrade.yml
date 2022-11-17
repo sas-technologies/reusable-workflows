@@ -109,3 +109,20 @@ jobs:
           -H "Authorization: Bearer ${{ secrets.BEARER_TOKEN }}" \
           https://api.github.com/repos/sas-technologies/ders-documents-uploader/actions/workflows/upgradeVersionCatalog.yml/dispatches \
           -d '{"ref":"master","inputs":{"catalogVersion":"${{ env.CATALOG_VERSION }}"}'
+  dispatch-upgrade-to-api-registrations:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Fetch version of catalog
+        run: |
+          echo "CATALOG_VERSION=$(grep "^version =" build.gradle.kts| cut -d ' ' -f3 | sed 's/\"//' | sed 's/\"//')" >> $GITHUB_ENV
+      - name: Dispatch Update of Library
+        run: |
+          curl \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.BEARER_TOKEN }}" \
+          https://api.github.com/repos/sas-technologies/ders-api-registrations/actions/workflows/upgradeVersionCatalog.yml/dispatches \
+          -d '{"ref":"master","inputs":{"catalogVersion":"${{ env.CATALOG_VERSION }}"}'
