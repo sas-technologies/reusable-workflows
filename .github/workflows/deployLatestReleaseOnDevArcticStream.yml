@@ -28,7 +28,7 @@ jobs:
           script: |
             export IMAGE_NAME=$IMAGE_NAME
             cd /opt/arctic-stream
-            docker-compose down --remove-orphans
+            docker-compose down
             if [[ "$(docker images -q $IMAGE_NAME 2> /dev/null)" == "" ]]; then
               docker image rm $IMAGE_NAME 
             fi
