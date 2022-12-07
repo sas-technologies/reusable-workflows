@@ -21,7 +21,7 @@ jobs:
           DERS_SECURITY_FIREBASE_SERVICE_KEY: ${{ secrets.DERS_SECURITY_FIREBASE_SERVICE_KEY }}
           AZURE_STORAGE_CONNECTION_STRING_DEV: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_DEV }}
         with:
-          host: 86.120.169.27
+          host: 165.22.89.92
           username: github-actions
           password: ${{ secrets.DEV_SERVER_PASSWORD }}
           envs: IMAGE_NAME
