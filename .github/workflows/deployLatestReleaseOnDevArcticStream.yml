@@ -7,10 +7,6 @@ on:
         required: true
       DEV_SERVER_PASSWORD:
         required: true
-    inputs:
-      PROJECT_NAME:
-        type: string
-        required: true
 
 jobs:
   deploy-latest-release-on-dev:
@@ -19,19 +15,13 @@ jobs:
       - name: Execute docker-compose remotely via ssh
         uses: appleboy/ssh-action@master
         env:
-          IMAGE_NAME: sastechnologies/${{ inputs.PROJECT_NAME }}:latest
           DERS_SECURITY_FIREBASE_SERVICE_KEY: ${{ secrets.DERS_SECURITY_FIREBASE_SERVICE_KEY }}
           AZURE_STORAGE_CONNECTION_STRING_DEV: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_DEV }}
         with:
           host: ${{ secrets.DEV_SERVER_HOST }}
           username: github-actions
           password: ${{ secrets.DEV_SERVER_PASSWORD }}
-          envs: IMAGE_NAME
           script: |
-            export IMAGE_NAME=$IMAGE_NAME
             cd /opt/arctic-stream
             docker-compose down
-            if [[ "$(docker images -q $IMAGE_NAME 2> /dev/null)" == "" ]]; then
-              docker image rm $IMAGE_NAME 
-            fi
             docker-compose up -d --pull
