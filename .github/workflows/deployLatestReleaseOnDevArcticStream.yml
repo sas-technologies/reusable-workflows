@@ -15,8 +15,8 @@ jobs:
       - name: Execute docker-compose remotely via ssh
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.REMOTE_SERVER_HOST }}
           username: github-actions
+          host: ${{ secrets.REMOTE_SERVER_HOST }}
           password: ${{ secrets.REMOTE_SERVER_PASSWORD }}
           script: |
             cd /opt/arctic-stream
