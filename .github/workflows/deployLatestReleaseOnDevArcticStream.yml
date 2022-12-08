@@ -3,6 +3,8 @@ name: Deploy DERS API to Dev Server
 on:
   workflow_call:
     secrets:
+      DEV_SERVER_HOST:
+        required: true
       DEV_SERVER_PASSWORD:
         required: true
     inputs:
@@ -21,7 +23,7 @@ jobs:
           DERS_SECURITY_FIREBASE_SERVICE_KEY: ${{ secrets.DERS_SECURITY_FIREBASE_SERVICE_KEY }}
           AZURE_STORAGE_CONNECTION_STRING_DEV: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_DEV }}
         with:
-          host: 165.22.89.92
+          host: ${{ secrets.DEV_SERVER_HOST }}
           username: github-actions
           password: ${{ secrets.DEV_SERVER_PASSWORD }}
           envs: IMAGE_NAME
