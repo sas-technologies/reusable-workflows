@@ -34,4 +34,4 @@ jobs:
             if [[ "$(docker images -q $IMAGE_NAME 2> /dev/null)" == "" ]]; then
               docker image rm $IMAGE_NAME 
             fi
-            docker-compose up -d --no-deps
+            docker-compose up -d --pull
