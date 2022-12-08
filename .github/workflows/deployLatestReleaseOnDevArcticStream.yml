@@ -25,16 +25,6 @@ on:
 jobs:
   deploy-latest-release-on-dev:
     runs-on: ubuntu-latest
-    env:
-      REMOTE_SERVER_HOST: ${{ secrets.REMOTE_SERVER_HOST }}
-      REMOTE_SERVER_PASSWORD: ${{ secrets.REMOTE_SERVER_PASSWORD }}
-      STRAPI_DATABASE_NAME: ${{ secrets.STRAPI_DATABASE_NAME }}
-      STRAPI_DATABASE_USERNAME: ${{ secrets.STRAPI_DATABASE_USERNAME }}
-      STRAPI_JWT_SECRET: ${{ secrets.STRAPI_JWT_SECRET }}
-      STRAPI_ADMIN_JWT_SECRET: ${{ secrets.STRAPI_ADMIN_JWT_SECRET }}
-      STRAPI_DATABASE_PASSWORD: ${{ secrets.STRAPI_DATABASE_PASSWORD }}
-      MAILING_DB_USERNAME: ${{ secrets.MAILING_DB_USERNAME }}
-      MAILING_DB_PASSWORD: ${{ secrets.MAILING_DB_PASSWORD }}
     steps:
       - name: Print env variables
         run: |
@@ -49,11 +39,30 @@ jobs:
           echo "MAILING_DB_PASSWORD = ${MAILING_DB_PASSWORD}"
       - name: Execute docker-compose remotely via ssh
         uses: appleboy/ssh-action@master
+        env:
+          REMOTE_SERVER_HOST: ${{ secrets.REMOTE_SERVER_HOST }}
+          REMOTE_SERVER_PASSWORD: ${{ secrets.REMOTE_SERVER_PASSWORD }}
+          STRAPI_DATABASE_NAME: ${{ secrets.STRAPI_DATABASE_NAME }}
+          STRAPI_DATABASE_USERNAME: ${{ secrets.STRAPI_DATABASE_USERNAME }}
+          STRAPI_JWT_SECRET: ${{ secrets.STRAPI_JWT_SECRET }}
+          STRAPI_ADMIN_JWT_SECRET: ${{ secrets.STRAPI_ADMIN_JWT_SECRET }}
+          STRAPI_DATABASE_PASSWORD: ${{ secrets.STRAPI_DATABASE_PASSWORD }}
+          MAILING_DB_USERNAME: ${{ secrets.MAILING_DB_USERNAME }}
+          MAILING_DB_PASSWORD: ${{ secrets.MAILING_DB_PASSWORD }}
         with:
           username: github-actions
           host: ${{ secrets.REMOTE_SERVER_HOST }}
           password: ${{ secrets.REMOTE_SERVER_PASSWORD }}
           script: |
+            export REMOTE_SERVER_HOST=$REMOTE_SERVER_HOST
+            export REMOTE_SERVER_PASSWORD=$REMOTE_SERVER_PASSWORD
+            export STRAPI_DATABASE_NAME=$STRAPI_DATABASE_NAME
+            export STRAPI_DATABASE_USERNAME=$STRAPI_DATABASE_USERNAME
+            export STRAPI_JWT_SECRET=$STRAPI_JWT_SECRET
+            export STRAPI_ADMIN_JWT_SECRET=$STRAPI_ADMIN_JWT_SECRET
+            export STRAPI_DATABASE_PASSWORD=$STRAPI_DATABASE_PASSWORD
+            export MAILING_DB_USERNAME=$MAILING_DB_USERNAME
+            export MAILING_DB_PASSWORD=$MAILING_DB_PASSWORD
             cd /opt/arctic-stream
             docker compose down
             docker image rm sastechnologies/arctic-stream-be-mailing:latest sastechnologies/arctic-stream-be-strapi:latest sastechnologies/arctic-stream-fe:latest
