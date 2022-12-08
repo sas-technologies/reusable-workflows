@@ -14,9 +14,6 @@ jobs:
     steps:
       - name: Execute docker-compose remotely via ssh
         uses: appleboy/ssh-action@master
-        env:
-          DERS_SECURITY_FIREBASE_SERVICE_KEY: ${{ secrets.DERS_SECURITY_FIREBASE_SERVICE_KEY }}
-          AZURE_STORAGE_CONNECTION_STRING_DEV: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_DEV }}
         with:
           host: ${{ secrets.REMOTE_SERVER_HOST }}
           username: github-actions
