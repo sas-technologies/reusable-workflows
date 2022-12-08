@@ -25,6 +25,16 @@ on:
 jobs:
   deploy-latest-release-on-dev:
     runs-on: ubuntu-latest
+    env:
+      REMOTE_SERVER_HOST: ${{ secrets.REMOTE_SERVER_HOST }}
+      REMOTE_SERVER_PASSWORD: ${{ secrets.REMOTE_SERVER_PASSWORD }}
+      STRAPI_DATABASE_NAME: ${{ secrets.STRAPI_DATABASE_NAME }}
+      STRAPI_DATABASE_USERNAME: ${{ secrets.STRAPI_DATABASE_USERNAME }}
+      STRAPI_JWT_SECRET: ${{ secrets.STRAPI_JWT_SECRET }}
+      STRAPI_ADMIN_JWT_SECRET: ${{ secrets.STRAPI_ADMIN_JWT_SECRET }}
+      STRAPI_DATABASE_PASSWORD: ${{ secrets.STRAPI_DATABASE_PASSWORD }}
+      MAILING_DB_USERNAME: ${{ secrets.MAILING_DB_USERNAME }}
+      MAILING_DB_PASSWORD: ${{ secrets.MAILING_DB_PASSWORD }}
     steps:
       - name: Execute docker-compose remotely via ssh
         uses: appleboy/ssh-action@master
