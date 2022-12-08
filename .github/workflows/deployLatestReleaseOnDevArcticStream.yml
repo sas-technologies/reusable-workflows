@@ -20,5 +20,5 @@ jobs:
           password: ${{ secrets.REMOTE_SERVER_PASSWORD }}
           script: |
             cd /opt/arctic-stream
-            docker-compose down
-            docker-compose up -d --pull
+            docker compose down
+            docker compose up -d --pull
