@@ -21,22 +21,13 @@ on:
         required: true
       MAILING_DB_PASSWORD:
         required: true
+      NEXT_STRAPI_API_KEY:
+        required: true
 
 jobs:
   deploy-latest-release-on-dev:
     runs-on: ubuntu-latest
     steps:
-      - name: Print env variables
-        run: |
-          echo "REMOTE_SERVER_HOST = ${REMOTE_SERVER_HOST}" 
-          echo "REMOTE_SERVER_PASSWORD = ${REMOTE_SERVER_PASSWORD}" 
-          echo "STRAPI_DATABASE_NAME = ${STRAPI_DATABASE_NAME}" 
-          echo "STRAPI_DATABASE_USERNAME = ${STRAPI_DATABASE_USERNAME}" 
-          echo "STRAPI_JWT_SECRET = ${STRAPI_JWT_SECRET}" 
-          echo "STRAPI_ADMIN_JWT_SECRET = ${STRAPI_ADMIN_JWT_SECRET}" 
-          echo "STRAPI_DATABASE_PASSWORD = ${STRAPI_DATABASE_PASSWORD}" 
-          echo "MAILING_DB_USERNAME = ${MAILING_DB_USERNAME}" 
-          echo "MAILING_DB_PASSWORD = ${MAILING_DB_PASSWORD}"
       - name: Execute docker-compose remotely via ssh
         uses: appleboy/ssh-action@master
         env:
@@ -49,6 +40,7 @@ jobs:
           STRAPI_DATABASE_PASSWORD: ${{ secrets.STRAPI_DATABASE_PASSWORD }}
           MAILING_DB_USERNAME: ${{ secrets.MAILING_DB_USERNAME }}
           MAILING_DB_PASSWORD: ${{ secrets.MAILING_DB_PASSWORD }}
+          NEXT_STRAPI_API_KEY: ${{ secrets.NEXT_STRAPI_API_KEY }}
         with:
           username: github-actions
           host: ${{ secrets.REMOTE_SERVER_HOST }}
@@ -63,6 +55,7 @@ jobs:
             export STRAPI_DATABASE_PASSWORD=$STRAPI_DATABASE_PASSWORD
             export MAILING_DB_USERNAME=$MAILING_DB_USERNAME
             export MAILING_DB_PASSWORD=$MAILING_DB_PASSWORD
+            export NEXT_STRAPI_API_KEY=$NEXT_STRAPI_API_KEY
             cd /opt/arctic-stream
             docker compose down
             docker image rm sastechnologies/arctic-stream-be-mailing:latest sastechnologies/arctic-stream-be-strapi:latest sastechnologies/arctic-stream-fe:latest
