@@ -7,6 +7,20 @@ on:
         required: true
       REMOTE_SERVER_PASSWORD:
         required: true
+      STRAPI_DATABASE_NAME:
+        required: true
+      STRAPI_DATABASE_USERNAME:
+        required: true
+      STRAPI_JWT_SECRET:
+        required: true
+      STRAPI_ADMIN_JWT_SECRET:
+        required: true
+      STRAPI_DATABASE_PASSWORD:
+        required: true
+      MAILING_DB_USERNAME:
+        required: true
+      MAILING_DB_PASSWORD:
+        required: true
 
 jobs:
   deploy-latest-release-on-dev:
