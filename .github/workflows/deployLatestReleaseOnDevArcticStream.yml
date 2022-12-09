@@ -23,6 +23,8 @@ on:
         required: true
       NEXT_STRAPI_API_KEY:
         required: true
+      STRAPI_API_TOKEN_SALT:
+        required: true
 
 jobs:
   deploy-latest-release-on-dev:
@@ -41,6 +43,7 @@ jobs:
           MAILING_DB_USERNAME: ${{ secrets.MAILING_DB_USERNAME }}
           MAILING_DB_PASSWORD: ${{ secrets.MAILING_DB_PASSWORD }}
           NEXT_STRAPI_API_KEY: ${{ secrets.NEXT_STRAPI_API_KEY }}
+          STRAPI_API_TOKEN_SALT: ${{ secrets.STRAPI_API_TOKEN_SALT }}
         with:
           username: github-actions
           host: ${{ secrets.REMOTE_SERVER_HOST }}
@@ -56,6 +59,7 @@ jobs:
             export MAILING_DB_USERNAME=$MAILING_DB_USERNAME
             export MAILING_DB_PASSWORD=$MAILING_DB_PASSWORD
             export NEXT_STRAPI_API_KEY=$NEXT_STRAPI_API_KEY
+            export STRAPI_API_TOKEN_SALT=$STRAPI_API_TOKEN_SALT
             cd /opt/arctic-stream
             docker compose down
             docker image rm sastechnologies/arctic-stream-be-mailing:latest sastechnologies/arctic-stream-be-strapi:latest sastechnologies/arctic-stream-fe:latest
