@@ -61,6 +61,7 @@ jobs:
             export NEXT_STRAPI_API_KEY=$NEXT_STRAPI_API_KEY
             export STRAPI_API_TOKEN_SALT=$STRAPI_API_TOKEN_SALT
             cd /opt/arctic-stream
+            source ~/.bashrc
             docker compose down
             docker image rm sastechnologies/arctic-stream-be-mailing:latest sastechnologies/arctic-stream-be-strapi:latest sastechnologies/arctic-stream-fe:latest
             docker compose up -d
