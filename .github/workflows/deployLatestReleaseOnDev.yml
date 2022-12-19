@@ -9,6 +9,8 @@ on:
         required: true
       DEV_SERVER_PASSWORD:
         required: true
+      DERS_EVENTS_API_PASSWORD:
+        required: true
       DERS_AUTHORITIES_API_PASSWORD:
         required: true
     inputs:
@@ -24,9 +26,10 @@ jobs:
         uses: appleboy/ssh-action@master
         env:
           IMAGE_NAME: sastechnologies/${{ inputs.PROJECT_NAME }}:latest
+          DERS_EVENTS_API_PASSWORD: ${{ secrets.DERS_EVENTS_API_PASSWORD }}
+          DERS_AUTHORITIES_API_PASSWORD: ${{ secrets.DERS_AUTHORITIES_API_PASSWORD }}
           DERS_SECURITY_FIREBASE_SERVICE_KEY: ${{ secrets.DERS_SECURITY_FIREBASE_SERVICE_KEY }}
           AZURE_STORAGE_CONNECTION_STRING_DEV: ${{ secrets.AZURE_STORAGE_CONNECTION_STRING_DEV }}
-          DERS_AUTHORITIES_API_PASSWORD: ${{ secrets.DERS_AUTHORITIES_API_PASSWORD }}
         with:
           host: 165.22.89.92
           username: github-actions
@@ -37,6 +40,7 @@ jobs:
             export DERS_SECURITY_FIREBASE_SERVICE_KEY=$DERS_SECURITY_FIREBASE_SERVICE_KEY
             export AZURE_STORAGE_CONNECTION_STRING_DEV=$AZURE_STORAGE_CONNECTION_STRING_DEV
             export DERS_AUTHORITIES_API_PASSWORD=$DERS_AUTHORITIES_API_PASSWORD
+            export DERS_EVENTS_API_PASSWORD=$DERS_EVENTS_API_PASSWORD
             cd /opt/ders
             docker compose down
             docker image rm $IMAGE_NAME
