@@ -25,6 +25,8 @@ on:
         required: true
       STRAPI_API_TOKEN_SALT:
         required: true
+      APP_KEYS:
+        required: true
 
 jobs:
   deploy-latest-release-on-dev:
@@ -33,6 +35,7 @@ jobs:
       - name: Execute docker-compose remotely via ssh
         uses: appleboy/ssh-action@master
         env:
+          APP_KEYS: "${{ secrets.APP_KEYS }}"
           REMOTE_SERVER_HOST: ${{ secrets.REMOTE_SERVER_HOST }}
           REMOTE_SERVER_PASSWORD: ${{ secrets.REMOTE_SERVER_PASSWORD }}
           STRAPI_DATABASE_NAME: ${{ secrets.STRAPI_DATABASE_NAME }}
@@ -60,6 +63,7 @@ jobs:
             export MAILING_DB_PASSWORD=$MAILING_DB_PASSWORD
             export NEXT_STRAPI_API_KEY=$NEXT_STRAPI_API_KEY
             export STRAPI_API_TOKEN_SALT=$STRAPI_API_TOKEN_SALT
+            export APP_KEYS="$APP_KEYS"
             cd /opt/arctic-stream
             source ~/.bashrc
             docker compose down
