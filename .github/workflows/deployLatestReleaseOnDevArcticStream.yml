@@ -3,29 +3,31 @@ name: Deploy DERS API to Dev Server
 on:
   workflow_call:
     secrets:
-      REMOTE_SERVER_HOST:
-        required: true
-      REMOTE_SERVER_PASSWORD:
+      NEXT_STRAPI_API_URL:
         required: true
       STRAPI_DATABASE_NAME:
         required: true
       STRAPI_DATABASE_USERNAME:
         required: true
-      STRAPI_JWT_SECRET:
+      STRAPI_DATABASE_PASSWORD:
+        required: true
+      STRAPI_API_TOKEN_SALT:
         required: true
       STRAPI_ADMIN_JWT_SECRET:
         required: true
-      STRAPI_DATABASE_PASSWORD:
+      STRAPI_JWT_SECRET:
+        required: true
+      APP_KEYS:
+        required: true
+      NEXT_STRAPI_API_KEY:
+        required: true
+      REMOTE_SERVER_HOST:
+        required: true
+      REMOTE_SERVER_PASSWORD:
         required: true
       MAILING_DB_USERNAME:
         required: true
       MAILING_DB_PASSWORD:
-        required: true
-      NEXT_STRAPI_API_KEY:
-        required: true
-      STRAPI_API_TOKEN_SALT:
-        required: true
-      APP_KEYS:
         required: true
 
 jobs:
@@ -47,6 +49,7 @@ jobs:
           MAILING_DB_PASSWORD: ${{ secrets.MAILING_DB_PASSWORD }}
           NEXT_STRAPI_API_KEY: ${{ secrets.NEXT_STRAPI_API_KEY }}
           STRAPI_API_TOKEN_SALT: ${{ secrets.STRAPI_API_TOKEN_SALT }}
+          NEXT_STRAPI_API_URL: ${{ secrets.NEXT_STRAPI_API_URL }}
         with:
           username: github-actions
           host: ${{ secrets.REMOTE_SERVER_HOST }}
