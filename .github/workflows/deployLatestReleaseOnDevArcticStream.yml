@@ -37,36 +37,50 @@ jobs:
       - name: Execute docker-compose remotely via ssh
         uses: appleboy/ssh-action@master
         env:
+          NEXT_STRAPI_API_URL: ${{ secrets.NEXT_STRAPI_API_URL }}
+          STRAPI_DATABASE_NAME: ${{ secrets.STRAPI_DATABASE_NAME }}
+          STRAPI_DATABASE_USERNAME: ${{ secrets.STRAPI_DATABASE_USERNAME }}
+          STRAPI_DATABASE_PASSWORD: ${{ secrets.STRAPI_DATABASE_PASSWORD }}
+          STRAPI_API_TOKEN_SALT: ${{ secrets.STRAPI_API_TOKEN_SALT }}
+          STRAPI_ADMIN_JWT_SECRET: ${{ secrets.STRAPI_ADMIN_JWT_SECRET }}
+          STRAPI_JWT_SECRET: ${{ secrets.STRAPI_JWT_SECRET }}
           APP_KEYS: "${{ secrets.APP_KEYS }}"
           REMOTE_SERVER_HOST: ${{ secrets.REMOTE_SERVER_HOST }}
           REMOTE_SERVER_PASSWORD: ${{ secrets.REMOTE_SERVER_PASSWORD }}
-          STRAPI_DATABASE_NAME: ${{ secrets.STRAPI_DATABASE_NAME }}
-          STRAPI_DATABASE_USERNAME: ${{ secrets.STRAPI_DATABASE_USERNAME }}
-          STRAPI_JWT_SECRET: ${{ secrets.STRAPI_JWT_SECRET }}
-          STRAPI_ADMIN_JWT_SECRET: ${{ secrets.STRAPI_ADMIN_JWT_SECRET }}
-          STRAPI_DATABASE_PASSWORD: ${{ secrets.STRAPI_DATABASE_PASSWORD }}
           MAILING_DB_USERNAME: ${{ secrets.MAILING_DB_USERNAME }}
           MAILING_DB_PASSWORD: ${{ secrets.MAILING_DB_PASSWORD }}
           NEXT_STRAPI_API_KEY: ${{ secrets.NEXT_STRAPI_API_KEY }}
-          STRAPI_API_TOKEN_SALT: ${{ secrets.STRAPI_API_TOKEN_SALT }}
-          NEXT_STRAPI_API_URL: ${{ secrets.NEXT_STRAPI_API_URL }}
         with:
           username: github-actions
           host: ${{ secrets.REMOTE_SERVER_HOST }}
           password: ${{ secrets.REMOTE_SERVER_PASSWORD }}
           script: |
-            export REMOTE_SERVER_HOST=$REMOTE_SERVER_HOST
-            export REMOTE_SERVER_PASSWORD=$REMOTE_SERVER_PASSWORD
+            export NEXT_STRAPI_API_URL=$NEXT_STRAPI_API_URL
             export STRAPI_DATABASE_NAME=$STRAPI_DATABASE_NAME
             export STRAPI_DATABASE_USERNAME=$STRAPI_DATABASE_USERNAME
-            export STRAPI_JWT_SECRET=$STRAPI_JWT_SECRET
-            export STRAPI_ADMIN_JWT_SECRET=$STRAPI_ADMIN_JWT_SECRET
             export STRAPI_DATABASE_PASSWORD=$STRAPI_DATABASE_PASSWORD
+            export STRAPI_API_TOKEN_SALT=$STRAPI_API_TOKEN_SALT
+            export STRAPI_ADMIN_JWT_SECRET=$STRAPI_ADMIN_JWT_SECRET
+            export STRAPI_JWT_SECRET=$STRAPI_JWT_SECRET
+            export APP_KEYS=$APP_KEYS
+            export REMOTE_SERVER_HOST=$REMOTE_SERVER_HOST
+            export REMOTE_SERVER_PASSWORD=$REMOTE_SERVER_PASSWORD
             export MAILING_DB_USERNAME=$MAILING_DB_USERNAME
             export MAILING_DB_PASSWORD=$MAILING_DB_PASSWORD
             export NEXT_STRAPI_API_KEY=$NEXT_STRAPI_API_KEY
-            export STRAPI_API_TOKEN_SALT=$STRAPI_API_TOKEN_SALT
-            export APP_KEYS="$APP_KEYS"
+            echo $NEXT_STRAPI_API_URL >> /tmp/arctic-env  
+            echo $STRAPI_DATABASE_NAME >> /tmp/arctic-env  
+            echo $STRAPI_DATABASE_USERNAME >> /tmp/arctic-env  
+            echo $STRAPI_DATABASE_PASSWORD >> /tmp/arctic-env  
+            echo $STRAPI_API_TOKEN_SALT >> /tmp/arctic-env  
+            echo $STRAPI_ADMIN_JWT_SECRET >> /tmp/arctic-env  
+            echo $STRAPI_JWT_SECRET >> /tmp/arctic-env  
+            echo $APP_KEYS >> /tmp/arctic-env  
+            echo $REMOTE_SERVER_HOST >> /tmp/arctic-env  
+            echo $REMOTE_SERVER_PASSWORD >> /tmp/arctic-env  
+            echo $MAILING_DB_USERNAME >> /tmp/arctic-env  
+            echo $MAILING_DB_PASSWORD >> /tmp/arctic-env  
+            echo $NEXT_STRAPI_API_KEY >> /tmp/arctic-env 
             cd /opt/arctic-stream
             source ~/.bashrc
             docker compose down
