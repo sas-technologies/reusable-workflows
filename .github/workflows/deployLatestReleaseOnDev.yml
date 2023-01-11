@@ -63,5 +63,5 @@ jobs:
             export DERS_MAILING_DB_PASSWORD=$DERS_MAILING_DB_PASSWORD
             cd /opt/ders
             docker compose down
-            docker image rm $IMAGE_NAME
+            if [[ -n $(docker image ls | grep $IMAGE_NAME) ]]; then docker image rm $IMAGE_NAME; fi
             docker compose up -d
