@@ -23,11 +23,11 @@ on:
         required: true
       DERS_MAILING_DB_PASSWORD:
         required: true
-    inputs:
-      PROJECT_NAME:
+      DERS_GATEWAY:
         type: string
         required: true
-      DERS_GATEWAY:
+    inputs:
+      PROJECT_NAME:
         type: string
         required: true
 
