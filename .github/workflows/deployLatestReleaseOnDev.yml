@@ -50,7 +50,7 @@ jobs:
           PUBLIC_DERS_EVENTS_API_PASSWORD: ${{ secrets.DERS_EVENTS_API_PASSWORD }}
           PUBLIC_DERS_GATEWAY: ${{ secrets.DERS_GATEWAY }}
           PUBLIC_DERS_DOCUMENTS_API_PASSWORD: ${{ secrets.DERS_DOCUMENTS_API_PASSWORD }}
-          PUBLIC_DERS_REGISTRATIONS_API_PASSWORD: ${{ secrets.DERS_REGISTRATIONS_API_PASSWORD }} rUSElisCAnTiONeysCElaNtAutERcrOnTateRNeOthYlABlort
+          PUBLIC_DERS_REGISTRATIONS_API_PASSWORD: ${{ secrets.DERS_REGISTRATIONS_API_PASSWORD }}
         with:
           host: 165.22.89.92
           username: github-actions
