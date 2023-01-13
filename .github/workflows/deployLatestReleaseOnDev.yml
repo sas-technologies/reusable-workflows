@@ -24,7 +24,6 @@ on:
       DERS_MAILING_DB_PASSWORD:
         required: true
       DERS_GATEWAY:
-        type: string
         required: true
     inputs:
       PROJECT_NAME:
