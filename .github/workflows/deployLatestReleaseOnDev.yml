@@ -13,6 +13,8 @@ on:
         required: true
       DERS_AUTHORITIES_API_PASSWORD:
         required: true
+      DERS_REPORTS_API_PASSWORD:
+        required: true
       DERS_DOCUMENTS_API_PASSWORD:
         required: true
       DERS_REGISTRATIONS_API_PASSWORD:
