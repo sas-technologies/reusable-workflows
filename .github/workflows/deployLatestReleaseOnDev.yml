@@ -109,3 +109,5 @@ jobs:
             docker compose down
             docker image rm $IMAGE_NAME
             docker compose up -d
+            cd /opt/proxy-manager
+            docker compose restart
